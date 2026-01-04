@@ -115,7 +115,12 @@ export default function KioskPage() {
         <div className="pb-8 px-8">
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 max-w-[180px] mx-auto shadow-lg">
             <div className="text-center space-y-3">
-              <div className="bg-white p-2 rounded-xl mx-auto w-fit">
+              <a
+                href={qrUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white p-2 rounded-xl mx-auto w-fit block hover:scale-105 transition-transform"
+              >
                 {qrUrl && (
                   <QRCode
                     value={qrUrl}
@@ -123,7 +128,7 @@ export default function KioskPage() {
                     level="H"
                   />
                 )}
-              </div>
+              </a>
 
               <p className="text-gray-500 text-xs">
                 Scan voor info
