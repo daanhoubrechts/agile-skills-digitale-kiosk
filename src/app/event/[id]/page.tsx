@@ -6,11 +6,37 @@ import Image from "next/image";
 import { Event, categoryLabels, categoryColors } from "@/types/event";
 import { fetchEventById } from "@/lib/event-api";
 
+// Default placeholder images per category
+const categoryPlaceholders: Record<string, string> = {
+  muziek: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop",
+  kunst: "https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=800&h=600&fit=crop",
+  food: "https://images.unsplash.com/photo-1565123409695-7b5ef63a2efb?w=800&h=600&fit=crop",
+  sport: "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=800&h=600&fit=crop",
+  theater: "https://images.unsplash.com/photo-1503095396549-807759245b35?w=800&h=600&fit=crop",
+  film: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=800&h=600&fit=crop",
+  familie: "https://images.unsplash.com/photo-1511895426328-dc8714191300?w=800&h=600&fit=crop",
+  nightlife: "https://images.unsplash.com/photo-1571266028243-d220c6a9c1d3?w=800&h=600&fit=crop",
+  markt: "https://images.unsplash.com/photo-1533900298318-6b8da08a523e?w=800&h=600&fit=crop",
+  overig: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=600&fit=crop",
+};
+
+const DEFAULT_PLACEHOLDER = "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=600&fit=crop";
+
 export default function EventPage() {
   const router = useRouter();
   const params = useParams();
   const [event, setEvent] = useState<Event | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [imageError, setImageError] = useState(false);
+
+  // Get the appropriate image URL with fallbacks
+  const getImageUrl = () => {
+    if (!event) return DEFAULT_PLACEHOLDER;
+    if (!imageError && event.imageUrl) {
+      return event.imageUrl;
+    }
+    return categoryPlaceholders[event.category] || DEFAULT_PLACEHOLDER;
+  };
 
   useEffect(() => {
     async function loadEvent() {
@@ -69,12 +95,13 @@ export default function EventPage() {
       {/* Header Image */}
       <div className="relative h-72 sm:h-96">
         <Image
-          src={event.imageUrl}
+          src={getImageUrl()}
           alt={event.title}
           fill
           className="object-cover"
           priority
-          unoptimized={!event.imageUrl.includes("unsplash")}
+          unoptimized
+          onError={() => setImageError(true)}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 

@@ -1,7 +1,25 @@
 "use client";
 
+import { useState } from "react";
 import { Event, categoryColors } from "@/types/event";
 import Image from "next/image";
+
+// Default placeholder images per category
+const categoryPlaceholders: Record<string, string> = {
+  muziek: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=600&fit=crop",
+  kunst: "https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=800&h=600&fit=crop",
+  food: "https://images.unsplash.com/photo-1565123409695-7b5ef63a2efb?w=800&h=600&fit=crop",
+  sport: "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=800&h=600&fit=crop",
+  theater: "https://images.unsplash.com/photo-1503095396549-807759245b35?w=800&h=600&fit=crop",
+  film: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=800&h=600&fit=crop",
+  familie: "https://images.unsplash.com/photo-1511895426328-dc8714191300?w=800&h=600&fit=crop",
+  nightlife: "https://images.unsplash.com/photo-1571266028243-d220c6a9c1d3?w=800&h=600&fit=crop",
+  markt: "https://images.unsplash.com/photo-1533900298318-6b8da08a523e?w=800&h=600&fit=crop",
+  overig: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=600&fit=crop",
+};
+
+// Generic fallback if category placeholder also fails
+const DEFAULT_PLACEHOLDER = "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=600&fit=crop";
 
 interface EventCardProps {
   event: Event;
@@ -9,6 +27,15 @@ interface EventCardProps {
 }
 
 export default function EventCard({ event, onClick }: EventCardProps) {
+  const [imageError, setImageError] = useState(false);
+  
+  // Get the appropriate image URL with fallbacks
+  const getImageUrl = () => {
+    if (!imageError && event.imageUrl) {
+      return event.imageUrl;
+    }
+    return categoryPlaceholders[event.category] || DEFAULT_PLACEHOLDER;
+  };
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat("nl-BE", {
       weekday: "short",
@@ -56,11 +83,13 @@ export default function EventCard({ event, onClick }: EventCardProps) {
       {/* Image */}
       <div className="relative h-40 w-full overflow-hidden">
         <Image
-          src={event.imageUrl}
+          src={getImageUrl()}
           alt={event.title}
           fill
           className="object-cover transition-transform duration-300 group-hover:scale-105"
           sizes="(max-width: 768px) 50vw, 33vw"
+          onError={() => setImageError(true)}
+          unoptimized
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         
