@@ -31,7 +31,7 @@ function Routing({ start, destination }: { start: LatLngTuple; destination: LatL
 
   useEffect(() => {
     if (!start || !destination || !map) return;
-
+    // @ts-ignore
     const routingControl = L.Routing.control({
       waypoints: [
         L.latLng(start[0], start[1]),
