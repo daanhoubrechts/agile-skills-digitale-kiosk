@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import Image from "next/image";
 import { Event, categoryLabels, categoryColors } from "@/types/event";
 import { fetchEventById } from "@/lib/event-api";
+import dynamic from "next/dynamic";
 
 // Default placeholder images per category
 const categoryPlaceholders: Record<string, string> = {
@@ -21,6 +22,13 @@ const categoryPlaceholders: Record<string, string> = {
 };
 
 const DEFAULT_PLACEHOLDER = "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=600&fit=crop";
+
+
+
+const Map = dynamic(() => import("@/components/Map"), {
+  ssr: false,
+});
+
 
 export default function EventPage() {
   const router = useRouter();
@@ -169,6 +177,7 @@ export default function EventPage() {
               </div>
             </div>
           </div>
+                <Map address={event.address} />
 
           {/* Divider */}
           <hr className="border-gray-200 my-6" />

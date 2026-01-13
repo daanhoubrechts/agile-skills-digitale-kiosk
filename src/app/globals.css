@@ -93,3 +93,7 @@ img {
 .animate-bounce {
   animation: bounce 1s ease-in-out infinite;
 }
+
+.leaflet-routing-container {
+  display: none !important;
+}
