@@ -101,7 +101,3 @@ npm start
 2. Bekijk het overzicht van alle evenementen
 3. Voeg nieuwe evenementen toe met het formulier
 4. Bewerk of verwijder bestaande events
-
----
-
-**💡 Tip:** Bekijk de live demo om alle features te ontdekken!
